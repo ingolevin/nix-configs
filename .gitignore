@@ -1,0 +1,15 @@
+# Nix build results
+result
+result-*
+
+# Temporary files
+*.swp
+*~
+\#*\#
+.DS_Store
+
+# Direnv
+.direnv/
+
+# Nix flake
+.pre-commit-config.yaml
