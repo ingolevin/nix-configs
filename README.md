@@ -60,8 +60,11 @@ swapon /dev/mapper/vg0-swap
 # Generate initial configuration
 nixos-generate-config --root /mnt
 
-# Copy configuration files
-# (Copy all files from this repository to /mnt/etc/nixos/)
+# Install Git if not available in the installer environment
+nix-env -iA nixos.git
+
+# Clone the configuration repository
+git clone https://github.com/ingolevin/nix-configs.git /mnt/etc/nixos/
 
 # Install NixOS
 nixos-install --flake /mnt/etc/nixos#nix01
@@ -80,6 +83,14 @@ sudo nixos-rebuild switch --flake /etc/nixos#nix01
 
 # Check system status
 systemctl status
+```
+
+## Cloning the Repository
+
+To clone this repository on a new system:
+
+```bash
+git clone https://github.com/ingolevin/nix-configs.git
 ```
 
 ## Configuration Structure
