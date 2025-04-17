@@ -9,29 +9,35 @@ This repository contains the NixOS configuration for the `nix01` server, a Hyper
 - **Architecture**: x86_64-linux
 - **Virtualization**: Hyper-V guest
 
-## Disk Configuration
+## Disk Configuration (UEFI / Generation 2)
 
 - **Disk**: /dev/sda (200 GiB)
 - **Partitions**:
-  1. /dev/sda1: 500 MB boot partition (ext4)
+  1. /dev/sda1: 512 MB EFI System Partition (FAT32, type "EFI System")
   2. /dev/sda2: 199.5 GB LVM partition (LUKS encrypted)
 - **Logical Volumes**:
   - Swap: 8 GiB
   - Root: 191.49 GiB
 
+> **Note:** These instructions are for Hyper-V Generation 2 (UEFI) VMs. Ensure Secure Boot is **disabled** in the VM settings.
+
 ## Setup Instructions
 
-### 1. Partitioning and Encryption
+### 1. Partitioning and Encryption (UEFI)
 
 ```bash
-# Create partitions
-parted /dev/sda -- mklabel msdos
-parted /dev/sda -- mkpart primary ext4 1MiB 500MiB
-parted /dev/sda -- mkpart primary 500MiB 100%
-parted /dev/sda -- set 1 boot on
+# Create GPT partition table
+parted /dev/sda -- mklabel gpt
 
-# Format boot partition
-mkfs.ext4 -L boot /dev/sda1
+# Create EFI System Partition (ESP) - 512MiB, FAT32
+parted /dev/sda -- mkpart ESP fat32 1MiB 513MiB
+parted /dev/sda -- set 1 esp on
+
+# Create LVM partition (rest of disk)
+parted /dev/sda -- mkpart primary 513MiB 100%
+
+# Format EFI partition
+mkfs.fat -F32 -n EFI /dev/sda1
 
 # Set up encryption
 cryptsetup luksFormat /dev/sda2
@@ -54,7 +60,7 @@ mkswap -L swap /dev/mapper/vg0-swap
 # Mount partitions
 mount /dev/mapper/vg0-root /mnt
 mkdir -p /mnt/boot
-mount /dev/sda1 /mnt/boot
+mount /dev/sda1 /mnt/boot  # ESP mounted at /mnt/boot
 swapon /dev/mapper/vg0-swap
 
 # Generate initial configuration
@@ -71,6 +77,16 @@ git clone https://github.com/ingolevin/nix-configs.git /mnt/etc/nixos/
 
 # Install NixOS
 nixos-install --flake /mnt/etc/nixos#nix01
+
+# Enter the new system (if needed for troubleshooting)
+nixos-enter --root /mnt
+
+# Install GRUB for UEFI
+# (If not done automatically by nixos-install, or if troubleshooting)
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=NixOS
+
+# Regenerate GRUB config
+nixos-rebuild boot --flake /etc/nixos#nix01
 
 # Reboot
 reboot
