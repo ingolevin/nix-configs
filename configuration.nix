@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, diskoConfigPath, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   imports = [
@@ -8,9 +8,6 @@
     ./modules/networking.nix
     ./modules/hyperv-guest.nix
   ];
-
-  # Use disko config passed via specialArgs
-  disko.config = import diskoConfigPath;
 
   # Boot loader configuration
   boot.loader.grub = {

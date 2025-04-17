@@ -16,7 +16,6 @@
     nixosConfigurations.nix01 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        ./configuration.nix
         home-manager.nixosModules.home-manager
         inputs.disko.nixosModules.disko
         {
@@ -24,8 +23,9 @@
           home-manager.useUserPackages = true;
           home-manager.users.stark84 = import ./home-manager/users/stark84.nix;
         }
+        ./configuration.nix
       ];
-      specialArgs = { inherit inputs; diskoConfigPath = ./disko-config.nix; };
+      specialArgs = { inherit inputs; };
     };
   };
 }
