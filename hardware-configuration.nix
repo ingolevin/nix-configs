@@ -9,11 +9,12 @@
   boot.extraModulePackages = [ ];
 
   # Enable LUKS encryption
-  boot.initrd.luks.devices."cryptlvm" = {
-    device = "/dev/sda2";
-    preLVM = true;
-    allowDiscards = true;
-  };
+  # boot.initrd.luks.devices."cryptlvm" = {
+  #   device = "/dev/sda2";
+  #   preLVM = true;
+  #   allowDiscards = true;
+  # };
+
 
   # Mount points (managed by disko)
   # fileSystems."/" = {
