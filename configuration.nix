@@ -9,9 +9,6 @@
     ./modules/hyperv-guest.nix
   ];
 
-  # Explicitly tell disko where its config is
-  disko.config = import ./disko-config.nix;
-
   # Boot loader configuration
   boot.loader.grub = {
     enable = true;
