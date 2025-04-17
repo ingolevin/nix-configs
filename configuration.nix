@@ -12,12 +12,7 @@
 
 
   # Boot loader configuration
-  boot.loader.grub = {
-    enable = true;
-    devices = [ "/dev/sda" ];
-    efiSupport = true;
-    efiInstallAsRemovable = true; # Install to fallback UEFI path
-  };
+  boot.loader.systemd-boot = { enable = true; };
 
   # Enable flakes and nix-command
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
