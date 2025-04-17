@@ -14,8 +14,9 @@
   # Boot loader configuration
   boot.loader.grub = {
     enable = true;
-    device = "/dev/sda";
-    efiSupport = false;
+    devices = [ "/dev/sda" ];
+    efiSupport = true;
+    efiInstallAsRemovable = true; # Install to fallback UEFI path
   };
 
   # Enable flakes and nix-command
