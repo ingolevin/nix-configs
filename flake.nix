@@ -22,6 +22,7 @@
           # home-manager.useUserPackages = true;
           # home-manager.users.stark84 = import ./home-manager/users/stark84.nix;
         # } # Temporarily disabled
+        inputs.disko.nixosModules.disko
         ./configuration.nix
       ];
       specialArgs = { inherit inputs; };
