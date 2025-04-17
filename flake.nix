@@ -25,7 +25,7 @@
         }
         ./configuration.nix
       ];
-      specialArgs = { inherit inputs; };
+      specialArgs = { inherit inputs; diskoConfigPath = ./disko-config.nix; };
     };
   };
 }
