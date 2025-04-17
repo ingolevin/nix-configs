@@ -23,7 +23,7 @@
     fd
     jq
     bat
-    exa
+    eza
     fzf
   ];
 }
