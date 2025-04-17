@@ -45,10 +45,15 @@ Install nixos-anywhere if you haven't:
 ```sh
 nix profile install github:nix-community/nixos-anywhere
 ```
-Run the installer (replace `<ip>` and `<user>` as needed):
+Run the installer (replace `<ip>` and `<ssh_config_alias>` as needed):
 ```sh
-nixos-anywhere --flake github:ingolevin/nix-configs#nix01 root@<ip>
+nixos-anywhere --flake github:ingolevin/nix-configs#nix01 root@<ip>|<ssh_config_alias>
 ```
+or for a certain branch: 
+```sh
+nixos-anywhere --flake github:ingolevin/nix-configs?ref=<branch_name>#nix01 root@<ip>|<ssh_config_alias>
+```
+
 - This will use your flake and the declarative disk layout in `disko.nix` to partition, format, encrypt, and install NixOS, fully unattended.
 - You will be prompted for the LUKS passphrase during the process.
 
@@ -65,76 +70,10 @@ nixos-anywhere --flake github:ingolevin/nix-configs#nix01 root@<ip>
 - All disk setup, encryption, and installation are now **fully automated** and reproducible.
 - Your configuration is defined in `flake.nix` and `disko.nix`.
 - To reinstall or deploy elsewhere, simply repeat the `nixos-anywhere` command.
-cryptsetup luksOpen /dev/sda2 cryptlvm
-
-# Set up LVM
-pvcreate /dev/mapper/cryptlvm
-vgcreate vg0 /dev/mapper/cryptlvm
-lvcreate -L 8G vg0 -n swap
-lvcreate -l 100%FREE vg0 -n root
-
-# Format partitions
-mkfs.ext4 -L root /dev/mapper/vg0-root
-mkswap -L swap /dev/mapper/vg0-swap
-```
-
-### 2. Installation
-
-```bash
-# Mount partitions
 mount /dev/mapper/vg0-root /mnt
 mkdir -p /mnt/boot
 mount /dev/sda1 /mnt/boot  # ESP mounted at /mnt/boot
 swapon /dev/mapper/vg0-swap
-
-# Generate initial configuration
-nixos-generate-config --root /mnt
-
-# (Important) Remove the generated config directory to avoid git clone errors
-rm -rf /mnt/etc/nixos
-
-# Install Git if not available in the installer environment
-nix-env -iA nixos.git
-
-# Clone the configuration repository
-git clone https://github.com/ingolevin/nix-configs.git /mnt/etc/nixos/
-
-# Install NixOS
-nixos-install --flake /mnt/etc/nixos#nix01
-
-# Enter the new system (if needed for troubleshooting)
-nixos-enter --root /mnt
-
-# Install GRUB for UEFI
-# (If not done automatically by nixos-install, or if troubleshooting)
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=NixOS
-
-# Regenerate GRUB config
-nixos-rebuild boot --flake /etc/nixos#nix01
-
-# Reboot
-reboot
-```
-
-### 3. Post-Installation
-
-After booting into the installed system:
-
-```bash
-# Update the system
-sudo nixos-rebuild switch --flake /etc/nixos#nix01
-
-# Check system status
-systemctl status
-```
-
-## Cloning the Repository
-
-To clone this repository on a new system:
-
-```bash
-git clone https://github.com/ingolevin/nix-configs.git
-```
 
 ## Configuration Structure
 
@@ -143,6 +82,7 @@ git clone https://github.com/ingolevin/nix-configs.git
 ├── flake.nix
 ├── configuration.nix
 ├── hardware-configuration.nix
+├── disko.nix
 ├── modules/
 │   ├── base.nix
 │   ├── users.nix
@@ -162,35 +102,8 @@ git clone https://github.com/ingolevin/nix-configs.git
 - **SSH Authentication**: Key-based, no password
 - **Groups**: wheel, networkmanager
 
-## Troubleshooting Boot Issues
+## Troubleshooting
 
-If you encounter boot issues:
-
-1. Boot from the NixOS installation media
-2. Unlock the encrypted partition:
-   ```bash
-   cryptsetup luksOpen /dev/sda2 cryptlvm
-   ```
-3. Mount the partitions:
-   ```bash
-   mount /dev/mapper/vg0-root /mnt
-   mount /dev/sda1 /mnt/boot
-   ```
-4. Chroot into the installed system:
-   ```bash
-   nixos-enter --root /mnt
-   ```
-5. Reinstall GRUB:
-   ```bash
-   grub-install --target=i386-pc /dev/sda
-   grub-mkconfig -o /boot/grub/grub.cfg
-   ```
-6. Rebuild the system:
-   ```bash
-   nixos-rebuild boot --flake /etc/nixos#nix01
-   ```
-7. Reboot:
-   ```bash
-   exit
-   reboot
-   ```
+- Ensure Secure Boot is **disabled** in Hyper-V VM settings.
+- If the system fails to boot after install, double-check that you used the automated `nixos-anywhere` + `disko` workflow and that the disk was empty before install.
+- For advanced troubleshooting, you can still boot the installer ISO and use `nixos-enter` to inspect the system, but manual partitioning and bootloader steps should not be necessary with the new workflow.
