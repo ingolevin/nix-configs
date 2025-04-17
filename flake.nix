@@ -16,12 +16,12 @@
     nixosConfigurations.nix01 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.stark84 = import ./home-manager/users/stark84.nix;
-        }
+        # home-manager.nixosModules.home-manager # Temporarily disabled
+        # {
+          # home-manager.useGlobalPkgs = true;
+          # home-manager.useUserPackages = true;
+          # home-manager.users.stark84 = import ./home-manager/users/stark84.nix;
+        # } # Temporarily disabled
         ./configuration.nix
       ];
       specialArgs = { inherit inputs; };
