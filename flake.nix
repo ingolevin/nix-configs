@@ -25,7 +25,7 @@
           home-manager.users.stark84 = import ./home-manager/users/stark84.nix;
         }
       ];
-      specialArgs = { inherit inputs; };
+      specialArgs = { inherit inputs; diskoConfigPath = ./disko-config.nix; };
     };
   };
 }
