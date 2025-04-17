@@ -3,12 +3,14 @@
 {
   imports = [
     ./hardware-configuration.nix
-    # ./disko.nix
     ./modules/base.nix
     ./modules/users.nix
     ./modules/networking.nix
     ./modules/hyperv-guest.nix
   ];
+
+  # Explicitly tell disko where its config is
+  disko.config = import ./disko-config.nix;
 
   # Boot loader configuration
   boot.loader.grub = {
