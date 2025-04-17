@@ -15,20 +15,20 @@
     allowDiscards = true;
   };
 
-  # Mount points
-  fileSystems."/" = {
-    device = "/dev/mapper/vg0-root";
-    fsType = "ext4";
-  };
+  # Mount points (managed by disko)
+  # fileSystems."/" = {
+  #   device = "/dev/mapper/vg0-root";
+  #   fsType = "ext4";
+  # };
 
-  fileSystems."/boot" = {
-    device = "/dev/sda1";
-    fsType = "ext4";
-  };
+  # fileSystems."/boot" = {
+  #   device = "/dev/sda1";
+  #   fsType = "ext4";
+  # };
 
-  swapDevices = [
-    { device = "/dev/mapper/vg0-swap"; }
-  ];
+  # swapDevices = [
+  #   { device = "/dev/mapper/vg0-swap"; }
+  # ];
 
   # Hyper-V specific settings
   virtualisation.hypervGuest.enable = true;
