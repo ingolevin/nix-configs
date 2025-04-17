@@ -21,26 +21,50 @@ This repository contains the NixOS configuration for the `nix01` server, a Hyper
 
 > **Note:** These instructions are for Hyper-V Generation 2 (UEFI) VMs. Ensure Secure Boot is **disabled** in the VM settings.
 
-## Setup Instructions
+## Automated Setup Instructions (nixos-anywhere + disko)
 
-### 1. Partitioning and Encryption (UEFI)
+This setup is now fully automated using [`nixos-anywhere`](https://github.com/nix-community/nixos-anywhere) and [`disko`](https://github.com/nix-community/disko). Manual partitioning and encryption are no longer required.
 
-```bash
-# Create GPT partition table
-parted /dev/sda -- mklabel gpt
+### Prerequisites
+- A Hyper-V Generation 2 (UEFI) VM with Secure Boot **disabled**
+- Your VM's virtual disk attached and empty
+- The VM is accessible via SSH (typically via the NixOS installer ISO, with networking configured)
+- Another machine (your admin workstation) with Nix and `nixos-anywhere` installed
 
-# Create EFI System Partition (ESP) - 512MiB, FAT32
-parted /dev/sda -- mkpart ESP fat32 1MiB 513MiB
-parted /dev/sda -- set 1 esp on
+### 1. Boot the Target VM
+- Boot the VM from the NixOS installer ISO
+- Set a root password and ensure SSH is running:
+  ```sh
+  passwd
+  systemctl start sshd
+  ip a  # Find the VM's IP address
+  ```
 
-# Create LVM partition (rest of disk)
-parted /dev/sda -- mkpart primary 513MiB 100%
+### 2. Run nixos-anywhere from your workstation
+Install nixos-anywhere if you haven't:
+```sh
+nix profile install github:nix-community/nixos-anywhere
+```
+Run the installer (replace `<ip>` and `<user>` as needed):
+```sh
+nixos-anywhere --flake github:ingolevin/nix-configs#nix01 root@<ip>
+```
+- This will use your flake and the declarative disk layout in `disko.nix` to partition, format, encrypt, and install NixOS, fully unattended.
+- You will be prompted for the LUKS passphrase during the process.
 
-# Format EFI partition
-mkfs.fat -F32 -n EFI /dev/sda1
+### 3. Reboot and Use Your System
+- Once complete, reboot the VM and remove the ISO.
+- The system will boot into your fully configured NixOS environment.
 
-# Set up encryption
-cryptsetup luksFormat /dev/sda2
+### Troubleshooting
+- Ensure Secure Boot is **disabled** in Hyper-V VM settings.
+- If you encounter boot issues, verify that the disk is set as the first boot device and that the disk was wiped before install.
+- For advanced troubleshooting, you can still boot the installer ISO and use `nixos-enter` as before.
+
+### Summary
+- All disk setup, encryption, and installation are now **fully automated** and reproducible.
+- Your configuration is defined in `flake.nix` and `disko.nix`.
+- To reinstall or deploy elsewhere, simply repeat the `nixos-anywhere` command.
 cryptsetup luksOpen /dev/sda2 cryptlvm
 
 # Set up LVM
