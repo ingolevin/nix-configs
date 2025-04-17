@@ -47,11 +47,11 @@ nix profile install github:nix-community/nixos-anywhere
 ```
 Run the installer (replace `<ip>` and `<ssh_config_alias>` as needed):
 ```sh
-nixos-anywhere --flake github:ingolevin/nix-configs#nix01 root@<ip>|<ssh_config_alias>
+nixos-anywhere --flake "github:ingolevin/nix-configs#nix01" root@<ip>|<ssh_config_alias>
 ```
 or for a certain branch: 
 ```sh
-nixos-anywhere --flake github:ingolevin/nix-configs?ref=<branch_name>#nix01 root@<ip>|<ssh_config_alias>
+nixos-anywhere --flake "github:ingolevin/nix-configs?ref=<branch_name>#nix01" root@<ip>|<ssh_config_alias>
 ```
 
 - This will use your flake and the declarative disk layout in `disko.nix` to partition, format, encrypt, and install NixOS, fully unattended.

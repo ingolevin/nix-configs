@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    disko.url = "github:nix-community/disko";
     
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -15,8 +16,9 @@
       system = "x86_64-linux";
       modules = [
         ./configuration.nix
-        ./disko.nix
         home-manager.nixosModules.home-manager
+        inputs.disko.nixosModules.disko
+        ({ ... }: { disko = import ./disko.nix; })
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
