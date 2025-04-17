@@ -60,6 +60,9 @@ swapon /dev/mapper/vg0-swap
 # Generate initial configuration
 nixos-generate-config --root /mnt
 
+# (Important) Remove the generated config directory to avoid git clone errors
+rm -rf /mnt/etc/nixos
+
 # Install Git if not available in the installer environment
 nix-env -iA nixos.git
 
