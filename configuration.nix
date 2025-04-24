@@ -10,6 +10,11 @@
     ./disko-config.nix
   ];
 
+  # Enable bitcoinknots from nix-bitcoin fork
+  services.nix-bitcoin.bitcoinknots.enable = true;
+  services.nix-bitcoin.bitcoind.enable = false;
+
+
 
   # Boot loader configuration
   boot.loader.systemd-boot = { enable = true; };
