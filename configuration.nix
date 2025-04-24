@@ -7,14 +7,12 @@
     ./modules/users.nix
     ./modules/networking.nix
     ./modules/hyperv-guest.nix
+    ./disko-config.nix
   ];
 
+
   # Boot loader configuration
-  boot.loader.grub = {
-    enable = true;
-    device = "/dev/sda";
-    efiSupport = false;
-  };
+  boot.loader.systemd-boot = { enable = true; };
 
   # Enable flakes and nix-command
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
