@@ -8,11 +8,18 @@
     ./modules/networking.nix
     ./modules/hyperv-guest.nix
     ./disko-config.nix
+
   ];
 
   # Enable bitcoinknots from nix-bitcoin fork
   services.nix-bitcoin.bitcoinknots.enable = true;
   services.nix-bitcoin.bitcoind.enable = false;
+
+  # Prune blockchain data, keep only ~75GB
+  services.nix-bitcoin.bitcoinknots.extraConfig = ''
+    prune=75000
+  '';
+
 
 
 

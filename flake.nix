@@ -25,8 +25,8 @@
           home-manager.users.stark84 = import ./home-manager/users/stark84.nix;
         }
         inputs.disko.nixosModules.disko
-        ./configuration.nix
         inputs.nix-bitcoin.nixosModules.default
+        ./configuration.nix
       ];
       specialArgs = { inherit inputs; };
     };
