@@ -11,12 +11,14 @@
 
   ];
 
-  # Enable bitcoinknots from nix-bitcoin fork
-  services.nix-bitcoin.bitcoinknots.enable = true;
-  services.nix-bitcoin.bitcoind.enable = false;
+  # Configure nix-bitcoin
+  nix-bitcoin.generateSecrets = true;
+
+  # Enable bitcoind from upstream nix-bitcoin
+  services.bitcoind.enable = true;
 
   # Prune blockchain data, keep only ~75GB
-  services.nix-bitcoin.bitcoinknots.extraConfig = ''
+  services.bitcoind.extraConfig = ''
     prune=75000
   '';
 

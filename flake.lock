@@ -92,16 +92,15 @@
         "nixpkgs-unstable": "nixpkgs-unstable"
       },
       "locked": {
-        "lastModified": 1745502409,
-        "narHash": "sha256-PdrvqkRHPc4/YbNhTfsgUuSt9CRrd1bYjuxaQAqQcK4=",
-        "owner": "steepdawn974",
+        "lastModified": 1743155549,
+        "narHash": "sha256-yU7iYlDSD8lOrm02igxIl3y+bXGZDDO0qcG0gO48Cto=",
+        "owner": "fort-nix",
         "repo": "nix-bitcoin",
-        "rev": "a768aebdae0f1ae871ac123be328655168e1f9c5",
+        "rev": "990805aa7c7fcd1552c6e14e8c6df9a88ba9be41",
         "type": "github"
       },
       "original": {
-        "owner": "steepdawn974",
-        "ref": "add-bitcoinknots",
+        "owner": "fort-nix",
         "repo": "nix-bitcoin",
         "type": "github"
       }

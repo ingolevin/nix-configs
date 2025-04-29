@@ -11,7 +11,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Add the forked nix-bitcoin
-    nix-bitcoin.url = "github:steepdawn974/nix-bitcoin/add-bitcoinknots";
+    nix-bitcoin.url = "github:fort-nix/nix-bitcoin";
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: {
