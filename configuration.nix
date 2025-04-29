@@ -14,16 +14,18 @@
   # Configure nix-bitcoin
   nix-bitcoin.generateSecrets = true;
 
-  # Enable bitcoind from upstream nix-bitcoin
-  services.bitcoind.enable = true;
+  # Disable bitcoind from upstream nix-bitcoin
+  services.bitcoind.enable = false;
 
-  # Prune blockchain data, keep only ~75GB
-  services.bitcoind.extraConfig = ''
-    prune=75000
-  '';
-
-
-
+  # Enable bitcoin-knots from the fork
+  services.bitcoin-knots = {
+    enable = true;
+    # Prune blockchain data, keep only ~75GB
+    # Use knotsSpecificOptions as defined in the fork's module
+    knotsSpecificOptions = {
+      prune = "75000";
+    };
+  };
 
   # Boot loader configuration
   boot.loader.systemd-boot = { enable = true; };
