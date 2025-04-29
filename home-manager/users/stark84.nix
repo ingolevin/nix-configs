@@ -16,6 +16,14 @@
       push.autoSetupRemote = true;
     };
   };
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      bitcoinlog = "sudo journalctl -fu bitcoind";
+      bitcoinconf = "sudo nano /var/lib/bitcoind/bitcoin.conf";
+      nix-rebuild = "sudo nixos-rebuild switch --flake '/etc/nixos/.#nix01'";
+    };
+  };  
   
   # Additional packages for this user
   home.packages = with pkgs; [
@@ -25,5 +33,7 @@
     bat
     eza
     fzf
+    btop
   ];
+
 }

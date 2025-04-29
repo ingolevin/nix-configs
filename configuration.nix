@@ -20,10 +20,10 @@
   # Enable bitcoin-knots from the fork
   services.bitcoin-knots = {
     enable = true;
-    # Prune blockchain data, keep only ~75GB
+    # Prune blockchain data, keep only ~10GB
     # Use knotsSpecificOptions as defined in the fork's module
     knotsSpecificOptions = {
-      prune = "75000";
+      prune = "10000";
     };
   };
 
