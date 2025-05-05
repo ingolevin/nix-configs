@@ -19,9 +19,6 @@
     enable = true;
     implementation = "knots";
     prune = 10000;
-    server = true;
-    txindex = true;
-    daemon = true;
   };
 
 
