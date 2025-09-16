@@ -12,6 +12,11 @@
     hashedPassword = null;
   };
 
-  # Allow users in the wheel group to execute sudo commands without a password
-  security.sudo.wheelNeedsPassword = false;
+  # Enable sudo explicitly (secure-node disables it), and make it NOPASSWD for wheel
+  security.sudo.enable = pkgs.lib.mkForce true;
+  security.sudo.wheelNeedsPassword = pkgs.lib.mkForce false;
+
+  # Keep doas too, NOPASSWD (optional, but consistent with secure-node)
+  security.doas.enable = pkgs.lib.mkForce true;
+  security.doas.wheelNeedsPassword = pkgs.lib.mkForce false;
 }

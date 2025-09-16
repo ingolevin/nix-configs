@@ -10,6 +10,9 @@
   # Configure firewall
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 22 ]; # SSH
+    allowedTCPPorts = [ 
+      22  # SSH
+      8332  # Bitcoin
+    ]; 
   };
 }

@@ -64,7 +64,8 @@ nixos-anywhere --flake "github:ingolevin/nix-configs#nix01" root@<ip>
   1. Edit your config locally and push to your git repo.
   2. SSH into the VM as `stark84` (see user config below).
   3. Pull the latest config inside the VM.
-  4. Run:
+  4. Go to `/etc/nixos/` directory.
+  5. Run:
      ```sh
      sudo nixos-rebuild switch --flake .#nix01
      ```
@@ -157,6 +158,10 @@ After the initial setup with `nixos-anywhere`, you should NOT use it for routine
    sudo nixos-rebuild switch --flake .#nix01
    ```
    *(Replace `.#nix01` with your actual flake reference if different.)*
+
+Or alternatively, you can build locally and apply the changes directly to a remote ssh host (needs to be defined in `~/.ssh/config`):
+   ```sh
+   REMOTE_HOST="<your-ssh-host>" && nix run "nixpkgs#nixos-rebuild" -- switch --flake ".#nix01" --target-host "$REMOTE_HOST" --build-host "$REMOTE_HOST" --use-remote-sudo   
 
 This will rebuild and activate your updated configuration without touching your data or reformatting the disk. This is the standard, safe way to make ongoing changes.
 

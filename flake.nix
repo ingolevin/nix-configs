@@ -10,6 +10,8 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Add the forked nix-bitcoin
+    nix-bitcoin.url = "github:steepdawn974/nix-bitcoin/add-bitcoinknots";
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: {
@@ -23,6 +25,7 @@
           home-manager.users.stark84 = import ./home-manager/users/stark84.nix;
         }
         inputs.disko.nixosModules.disko
+        inputs.nix-bitcoin.nixosModules.default
         ./configuration.nix
       ];
       specialArgs = { inherit inputs; };
